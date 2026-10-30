@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#f3e4b0">
+<title>CHOSU MATCH ちょすの神経衰弱</title>
+<meta name="author" content="1co (ichishiki)">
+<meta name="copyright" content="© 2026 1co (ichishiki). All rights reserved.">
+<meta name="description" content="同じ日のちょすを2まいそろえよう！月ごとのイラストで遊べる、ブラウザの神経衰弱ゲーム。ひとりでも、ふたりでも。">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="CHOSU MATCH">
+<meta property="og:title" content="CHOSU MATCH ちょすの神経衰弱">
+<meta property="og:description" content="同じ日のちょすを2まいそろえよう！月ごとのイラストで遊べる、ブラウザの神経衰弱ゲーム。ひとりでも、ふたりでも。">
+<meta property="og:url" content="https://1co.github.io/chosu-match/">
+<meta property="og:image" content="https://1co.github.io/chosu-match/ogp.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:locale" content="ja_JP">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="CHOSU MATCH ちょすの神経衰弱">
+<meta name="twitter:description" content="同じ日のちょすを2まいそろえよう！月ごとのイラストで遊べる、ブラウザの神経衰弱ゲーム。ひとりでも、ふたりでも。">
+<meta name="twitter:image" content="https://1co.github.io/chosu-match/ogp.png">
+<link rel="shortcut icon" href="favicon.ico">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Zen+Maru+Gothic:wght@500;700;900&display=swap">
+<link rel="stylesheet" href="assets/css/style.css?v=586578032e">
+</head>
+<body>
+
+<!-- ===== タイトル ===== -->
+<main class="screen title-screen" id="titleScreen">
+  <header class="topbar">
+    <a class="topbar__logo" href="https://ichishiki.com/chosu/"><img src="assets/img/logo.svg" alt="ちょすとにくまん"></a>
+    <button class="icon-btn sound-btn" type="button" aria-label="効果音" aria-pressed="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9h4l5-4v14l-5-4H4z"/><path class="on" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M16 9l6 6M22 9l-6 6"/></svg>
+    </button>
+  </header>
+
+  <section class="hero">
+    <div class="hero__text">
+      <p class="eyebrow">Chosu Memory Game</p>
+      <h1 class="logo-title"><span>CHOSU</span><span>MATCH</span></h1>
+      <p class="hero__catch"><span>おなじ日のちょすを、</span><br><span>2まいそろえよう。</span></p>
+    </div>
+    <div class="hero__art" aria-hidden="true">
+      <img class="hero__chosu" src="assets/img/chosu.webp" alt="">
+      <img class="hero__nikuman" src="assets/img/nikuman.webp" alt="">
+    </div>
+  </section>
+
+  <section class="setup-area">
+    <div class="setup">
+      <p class="setup__title">あそびかたを えらんでね</p>
+
+      <div class="field">
+        <label class="field__label" for="month">イラストの月</label>
+        <div class="select"><select id="month"></select></div>
+      </div>
+
+      <div class="field">
+        <span class="field__label" id="levelLabel">むずかしさ</span>
+        <div class="seg" role="radiogroup" aria-labelledby="levelLabel" data-group="level">
+          <button type="button" role="radio" data-value="easy" aria-checked="true">かんたん<small>6くみ</small></button>
+          <button type="button" role="radio" data-value="normal" aria-checked="false">ふつう<small>10くみ</small></button>
+          <button type="button" role="radio" data-value="hard" aria-checked="false">むずかしい<small>15くみ</small></button>
+        </div>
+      </div>
+
+      <div class="field">
+        <span class="field__label" id="playersLabel">にんずう</span>
+        <div class="seg" role="radiogroup" aria-labelledby="playersLabel" data-group="players">
+          <button type="button" role="radio" data-value="1" aria-checked="true">ひとりで<small>手数とタイム</small></button>
+          <button type="button" role="radio" data-value="2" aria-checked="false">ふたりで<small>こうたいでめくる</small></button>
+        </div>
+      </div>
+
+      <p class="setup__best" id="bestLine"></p>
+      <button class="button" id="startBtn" type="button">スタート</button>
+    </div>
+  </section>
+
+  <footer class="footer">
+    <div class="version"><span class="v">v</span>1.0.0</div>
+    <small>&copy; 2026 ICHISHIKI. All rights reserved.</small>
+  </footer>
+</main>
+
+<!-- ===== ゲーム ===== -->
+<main class="screen game-screen" id="gameScreen" hidden>
+  <header class="game-top">
+    <button class="icon-btn" id="backBtn" type="button" aria-label="タイトルにもどる">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <div class="counter" id="counter" aria-live="polite"></div>
+    <button class="icon-btn sound-btn" type="button" aria-label="効果音" aria-pressed="true">
+      <svg viewBox="0 0 24 24" aria-hidden="true"><path class="spk" d="M4 9h4l5-4v14l-5-4H4z"/><path class="on" d="M16 8.5a5 5 0 0 1 0 7M18.5 6a8.5 8.5 0 0 1 0 12"/><path class="off" d="M16 9l6 6M22 9l-6 6"/></svg>
+    </button>
+  </header>
+
+  <div class="status" id="status"></div>
+
+  <div class="board-wrap" id="boardWrap">
+    <div class="board" id="board"></div>
+  </div>
+
+  <div class="tray" id="tray" aria-label="そろえたカード"></div>
+</main>
+
+<!-- ===== クリア ===== -->
+<div class="modal" id="modal" role="dialog" aria-modal="true" aria-labelledby="clearTitle" hidden>
+  <div class="modal__panel">
+    <h2 class="logo-title logo-title--s" id="clearTitle">CLEAR!</h2>
+    <div class="modal__result" id="clearMsg"></div>
+    <p class="modal__album-label" id="albumLabel"></p>
+    <div class="album" id="album"></div>
+    <div class="modal__btns">
+      <button class="button" id="againBtn" type="button">もういちど</button>
+      <button class="button button--sub" id="toTitleBtn" type="button">タイトルへ</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== やめる確認 ===== -->
+<div class="modal" id="quitModal" role="alertdialog" aria-modal="true" aria-labelledby="quitTitle" aria-describedby="quitNote" hidden>
+  <div class="modal__panel modal__panel--s">
+    <img class="modal__face" src="assets/img/nikuman.webp" alt="">
+    <p class="modal__question" id="quitTitle">ほんとうに やめますか？</p>
+    <p class="modal__note" id="quitNote">いまのゲームの きろくは のこりません</p>
+    <div class="modal__btns">
+      <button class="button" id="quitCancelBtn" type="button">つづける</button>
+      <button class="button button--sub" id="quitOkBtn" type="button">やめる</button>
+    </div>
+  </div>
+</div>
+
+<script src="assets/js/months.js?v=9c17fdc1f0"></script>
+<script src="assets/js/game.js?v=7a52967635"></script>
+</body>
+</html>
