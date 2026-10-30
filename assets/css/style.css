@@ -973,13 +973,15 @@ button {
 	}
 
 	.hero {
-		grid-template-columns: minmax(0, 1fr) 8.5rem;
-		gap: .5rem;
+		/* 375px幅を基準に、狭い画面ではタイトル・キャッチ・イラストを同じ比率で縮める */
+		grid-template-columns: minmax(0, 1fr) min(9.25rem, 40vw);
+		gap: .25rem;
 		padding-bottom: 2.75rem;
 	}
 
+	/* イラストは大きめにして、右の余白に少しはみ出させる */
 	.hero__art {
-		width: 100%;
+		width: calc(100% + .375rem);
 	}
 
 	.eyebrow {
@@ -992,9 +994,13 @@ button {
 		filter: drop-shadow(4px 4px 0 var(--ink));
 	}
 
+	.hero .logo-title {
+		font-size: min(3.5rem, 14.2vw);
+	}
+
 	.hero__catch {
 		margin-top: 1.25rem;
-		font-size: 1.0625rem;
+		font-size: min(1.0625rem, 4.4vw);
 		white-space: nowrap;
 	}
 
